@@ -25,3 +25,7 @@ Projection
 Embedded Documents
     Up to 100 Levels of Nests and Max of 16mb per document
     when finding documents based on embedded documents you can do .find({"key.key"})
+
+Learn more about the MongoDB Drivers: https://docs.mongodb.com/ecosystem/drivers/
+
+Dive into the official Getting Started Docs: https://docs.mongodb.com/manual/tutorial/getting-started/
