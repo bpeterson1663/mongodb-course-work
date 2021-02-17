@@ -1,0 +1,8 @@
+- insert 3 patient records with at least 1 history entry per patient
+    - db.patients.insertMany(patients.json)
+- update patient data of 1 patient with new age, name and history entry
+    - db.patients.updateOne({name: "Brady Peterson"}, {$set: {name: "Brady John Peterson", age: 32, history: [{disease: "depression", treatment: "play with dog"}]}})
+- find all patients who are older than 30 (or a value of your choice)
+    - db.patients.find({age: {$gt: 30}})
+- Delete all patients who got a cold as a disease
+    - db.patients.deleteMany({"history.disease": "cold"})
