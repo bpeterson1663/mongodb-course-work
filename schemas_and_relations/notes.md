@@ -103,3 +103,10 @@ Schema Validation
         }})
 
  - db.runCommand({collMod: "posts", validator: {...}}) // how to change an existing collection's validation
+
+Additional Flags
+ --logpath /PATH_TO_OUTPUT_LOGS
+ --fork --logpath //runs as a background service, need logpath 
+
+mongod.cfg // config file
+mongod --config /PATH_TO/mongod.cfg
