@@ -60,3 +60,9 @@ Read
     db.sales.find({$expr: {$gt: ["volume", "target"]}}) // return all sales where volume is greater than target
 
     db.sales.find({$expre: [{$cond: {if: {$gte: ["$volume", 190]}, then: {$subtract: ["$volume", 10]}, else: "$volume" }}, "$target"]}) 
+    
+    Querying Arrays
+        - db.users.find({"hobbies.title": "Sports"}) // hobbies is an array and will search all documents and all documents in hobbies 
+        - db.users.find({hobbies: {$size: 3}}) // only exact matches. Will return all users that have 3 hobbies
+        - db.boxOffice.find({genre: {$all: ["action", "thriller"]}}) // if I didnt specify $all then only documents that have this order will be returned. $all ignores order and will any document that contains the values regardless of order
+        db.users.find({hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}}) // searches all documents but focuses on the embeded documents in hobbies to return results
