@@ -66,3 +66,10 @@ Read
         - db.users.find({hobbies: {$size: 3}}) // only exact matches. Will return all users that have 3 hobbies
         - db.boxOffice.find({genre: {$all: ["action", "thriller"]}}) // if I didnt specify $all then only documents that have this order will be returned. $all ignores order and will any document that contains the values regardless of order
         db.users.find({hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}}) // searches all documents but focuses on the embeded documents in hobbies to return results
+
+Sort
+    - db.movies.find().sort({"rating.average": 1, runtime: -1}) // 1 = ascending, -1 = descending
+
+Projection
+    - db.movies.find({}, {name: 1, runtime: 1, genres: 1}) //second argument to find is the projection, how we want the data returned. This query will return all movies but only the name, runtime and genres fields
+    db.movies.find({genres: "Drama"}, {genres: {$elemMatch: {$eq: "Horror"}}}) // will return all movies that have Drama but will only output genres: ["Horror"], this will result in some documents outputing blank if they dont have Horror as a genre along with drama 
