@@ -92,3 +92,10 @@ Update
     db.users.updateOne({name: "Maria"}, {$pull: {hobbies: {title: "Hiking"}}}) // removes the Hiking document from hobbies array, 
     $pop: {hobbies: 1} // removes the last item, use -1 to remove the first
     $addToSet - wont push duplicate data. unique values only
+
+Delete
+    db.users.deleteOne({name: {"Chris"}}) //query selector works the same as find or updateOne/updateMany
+    db.users.deleteMany({totalAge: {$exists: false}, isSporty: true}) // removes documents where totalAge does not exists and isSporty is true
+    db.users.deleteMany({}) //removes all documents. collection still exists
+    db.users.drop() //drops the entire users collection
+    db.dropDatabase() //drops the current database you are on
