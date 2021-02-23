@@ -84,3 +84,11 @@ Update
     db.users.updateMany({isSporty: true}, {$unset: {phone: ""}}) // removes the phone attribute where isSporty is true
     db.users.updateMany({}, {$rename: {age: "totalAge"}}) // update all users to change age to totalAge. If age doesnt exists nothing happens
     db.users.updateOne({name: "Maria"}, {$set: {age: 29, hobbies: [{title: "Good food", frequency: 3}]}}, {upsert: true}) //Maria document doesn't exist. Passing upsert will add Maria if it doesnt exist. The name will get added as part of the document
+
+    db.users.updateMany({hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}}, {$set: {"hobbies.$.highFrequency": true}}) //hobbies.$ refers to updating only that attribute based on the querried results. 
+    "hobbies.$[]" update all in the array
+    db.users.updateMany({"hobbies.frequency": {$gt: 2}}, {$set: {"hobbies.$[el].goodFrequency": true}}, {arrayFilters: [{"el.frequency": {$gt: 2}}]}) // update all documents in the hobbies array with a key of goodFrequency and value of true where the hobbies document has a frequency of greater than two. The query can be complete different then the arrayFilters param
+    db.users.updateOne({name: "Maria"}, {$push: {hobbies: { title: "sports"}}}) // adding a new hobby without overwriting the original. use {$each: [..documents ]} to add multiple
+    db.users.updateOne({name: "Maria"}, {$pull: {hobbies: {title: "Hiking"}}}) // removes the Hiking document from hobbies array, 
+    $pop: {hobbies: 1} // removes the last item, use -1 to remove the first
+    $addToSet - wont push duplicate data. unique values only
