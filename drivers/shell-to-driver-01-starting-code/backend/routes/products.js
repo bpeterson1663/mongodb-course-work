@@ -1,9 +1,7 @@
 const Router = require('express').Router;
 const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient;
 const Decimal128 = mongodb.Decimal128
-const uri = "mongodb+srv://daily-user:"+process.env.MONGO_PASSWORD+"@cluster0.ybtum.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = require('../db')
 const router = Router();
 
 const products = [
@@ -57,18 +55,18 @@ const products = [
 
 // Get list of products products
 router.get('/', (req, res, next) => {
-  // Return a list of dummy products
-  // Later, this data will be fetched from MongoDB
-  const queryPage = req.query.page;
-  const pageSize = 5;
-  let resultProducts = [...products];
-  if (queryPage) {
-    resultProducts = products.slice(
-      (queryPage - 1) * pageSize,
-      queryPage * pageSize
-    );
-  }
-  res.json(resultProducts);
+    const products = []
+    db.getDb().db().collection('products').find().forEach(product => {
+      product.price = product.price.toString()
+      products.push(product)
+    }).then(result => {
+      res.status(200).json(products);
+
+    }).catch(err => {
+      console.error("ERROR:", err)
+      res.status(500).json({ message: 'An Error Occured'});
+
+    })
 });
 
 // Get single product
@@ -87,21 +85,14 @@ router.post('', (req, res, next) => {
     image: req.body.image
   };
 
-  client.connect(err => {
-    console.log("ERROR", err)
-    client.db().collection('products').insertOne(newProduct).then(result => {
+    db.getDb().db().collection('products').insertOne(newProduct).then(result => {
       console.log(result)
-
-      client.close()
       res.status(201).json({ message: 'Product added', productId: result.insertedId });
 
     }).catch(err => {
-      console.error("ERROR:", err)
-      client.close();
       res.status(500).json({ message: 'An Error Occured'});
 
     })
-  })
 });
 
 // Edit existing product
